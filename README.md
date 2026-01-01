@@ -10,8 +10,14 @@ Why? Because you can. And because prime commit hashes are cool.
 
 ## Installation
 
+**Linux/macOS:**
 ```bash
 curl -fsSL https://textonly.github.io/git-prime/install.sh | bash
+```
+
+**Windows (PowerShell):**
+```powershell
+irm https://textonly.github.io/git-prime/install.ps1 | iex
 ```
 
 Or manually:
