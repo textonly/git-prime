@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>git-prime: Number Theoretic Compliance for Git</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            background: #FF10F0; /* FLUORO MAGENTA */
+            color: #000;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #FFF;
+            padding: 3rem;
+            border: 8px solid #000;
+            box-shadow: 12px 12px 0 #000;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            border-bottom: 4px solid #FF10F0;
+            padding-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #FF10F0;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .install-box {
+            background: #000;
+            color: #0F0;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+        }
+
+        .install-box code {
+            color: #0F0;
+        }
+
+        .example {
+            background: #f5f5f5;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid #FF10F0;
+            font-size: 0.9rem;
+        }
+
+        .prime-badge {
+            background: #FF10F0;
+            color: #FFF;
+            padding: 0.5rem 1rem;
+            display: inline-block;
+            font-weight: bold;
+            margin: 1rem 0;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0 #000;
+        }
+
+        ul {
+            margin: 1rem 0 1rem 2rem;
+        }
+
+        li {
+            margin: 0.5rem 0;
+        }
+
+        a {
+            color: #FF10F0;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 2px solid #FF10F0;
+        }
+
+        a:hover {
+            background: #FF10F0;
+            color: #FFF;
+        }
+
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #FF10F0;
+            text-align: center;
+            color: #666;
+        }
+
+        .commit-hash {
+            font-family: 'Courier New', monospace;
+            background: #FFE0FE;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>git-prime</h1>
+        <p class="subtitle">Ensure your 160-bit git commit hashes are Number Theoretic compliant</p>
+
+        <div class="prime-badge">
+            [PRIME CERTIFIED]
+        </div>
+
+        <h2>What is this?</h2>
+        <p>
+            A tool that fuzzes your commit messages until the resulting SHA-1 hash
+            is a <strong>prime number</strong> when interpreted as a 160-bit integer.
+        </p>
+        <p style="margin-top: 1rem;">
+            Because your commits deserve mathematical rigor.
+        </p>
+
+        <h2>Installation</h2>
+        <div class="install-box">
+            <code>curl -fsSL https://raw.githubusercontent.com/textonly/git-prime/main/install-prime-commit.sh | bash</code>
+        </div>
+
+        <h2>Usage</h2>
+        <div class="example">
+            <strong>$ git prime-commit "Fix critical bug"</strong><br><br>
+            Searching for prime commit hash...<br>
+            Base message: Fix critical bug<br>
+            Attempt 10: d051b974ece9d844... not prime<br>
+            Attempt 20: 954de912a9e5bbce... not prime<br>
+            Attempt 30: ace4df509c5a9677... not prime<br>
+            ...<br>
+            Attempt 168: cb80ebbd975f0028... not prime<br><br>
+            <strong>[PRIME] Found after 168 attempts!</strong><br>
+            &nbsp;&nbsp;Commit: <span class="commit-hash">cb80ebbd975f00288dca70d8fa735c688755f947</span><br>
+            &nbsp;&nbsp;Hash as int: 1161800157764419353674868058637793188631547345223<br>
+            &nbsp;&nbsp;Message nonce: 167
+        </div>
+
+        <h2>How it works</h2>
+        <ul>
+            <li>SHA-1 hashes are 160 bits (40 hex characters)</li>
+            <li>When interpreted as integers, they range from 0 to ~10<sup>48</sup></li>
+            <li>Miller-Rabin primality test checks if the hash is prime</li>
+            <li>Appends nonces to your message until a prime hash is found</li>
+            <li>Average runtime: 30-120 seconds</li>
+        </ul>
+
+        <h2>Features</h2>
+        <ul>
+            <li><strong>Mathematically sound:</strong> 40-round Miller-Rabin test</li>
+            <li><strong>Git integration:</strong> Works as a git subcommand</li>
+            <li><strong>Cross-platform:</strong> Python 3.6+, any OS</li>
+            <li><strong>Zero dependencies:</strong> Pure Python stdlib</li>
+        </ul>
+
+        <h2>Why?</h2>
+        <p>
+            Because hunting for prime commit hashes is more fun than arguing about
+            commit message conventions.
+        </p>
+
+        <div class="footer">
+            <p>
+                <a href="https://github.com/textonly/git-prime">View on GitHub</a>
+            </p>
+            <p style="margin-top: 1rem;">
+                MIT License • Made with mathematical precision
+            </p>
+        </div>
+    </div>
+</body>
+</html>
