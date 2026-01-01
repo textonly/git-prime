@@ -191,7 +191,7 @@
             &nbsp;&nbsp;Commit: <span class="commit-hash">cb80ebbd975f00288dca70d8fa735c688755f947</span><br>
             &nbsp;&nbsp;Hash as int: 1161800157764419353674868058637793188631547345223<br>
             &nbsp;&nbsp;<a href="https://www.wolframalpha.com/input?i=1161800157764419353674868058637793188631547345223" target="_blank" style="color: #FF10F0; font-size: 0.9em;">→ Verify on WolframAlpha</a><br>
-            &nbsp;&nbsp;Message nonce: 167
+            &nbsp;&nbsp;Message: "Fix critical bug" + git-prime Nonce: 167
         </div>
 
         <h2>How it works</h2>
@@ -199,7 +199,7 @@
             <li>SHA-1 hashes are 160 bits (40 hex characters)</li>
             <li>When interpreted as integers, they range from 0 to ~10<sup>48</sup></li>
             <li>Miller-Rabin primality test checks if the hash is prime</li>
-            <li>Appends nonces to your message until a prime hash is found</li>
+            <li>Appends nonces (git-prime Nonce: N) to your message until a prime hash is found</li>
             <li>Average runtime: 30-120 seconds</li>
         </ul>
 

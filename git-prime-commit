@@ -97,7 +97,7 @@ def main():
         if attempt == 0:
             message = base_message
         else:
-            message = f"{base_message}\n\nNonce: {attempt}"
+            message = f"{base_message}\n\ngit-prime Nonce: {attempt}"
 
         hash_int, hash_hex = get_commit_hash(message)
         if hash_int is None:
