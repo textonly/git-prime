@@ -11,12 +11,12 @@ Why? Because you can. And because prime commit hashes are cool.
 ## Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/textonly/git-prime/main/install-prime-commit.sh | bash
+curl -fsSL https://textonly.github.io/git-prime/install-prime-commit.sh | bash
 ```
 
 Or manually:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/textonly/git-prime/main/git-prime-commit -o ~/.local/bin/git-prime-commit
+curl -fsSL https://textonly.github.io/git-prime/git-prime-commit -o ~/.local/bin/git-prime-commit
 chmod +x ~/.local/bin/git-prime-commit
 ```
 
