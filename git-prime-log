@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""
+git-prime-log: git log, but highlights prime commits
+"""
+import subprocess
+import sys
+import random
+
+# Reuse primality test (minified)
+def is_prime(n, k=10):
+    if n < 2: return False
+    if n == 2 or n == 3: return True
+    if n % 2 == 0: return False
+    r, d = 0, n - 1
+    while d % 2 == 0: r += 1; d //= 2
+    for _ in range(k):
+        a = random.randrange(2, n - 1)
+        x = pow(a, d, n)
+        if x == 1 or x == n - 1: continue
+        for _ in range(r - 1):
+            x = pow(x, 2, n)
+            if x == n - 1: break
+        else: return False
+    return True
+
+def main():
+    # Pass arguments through to git log
+    args = ['git', 'log', '--pretty=format:%H|%h|%s|%an|%ar'] + sys.argv[1:]
+    
+    result = subprocess.run(args, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(result.stderr)
+        sys.exit(result.returncode)
+
+    lines = result.stdout.split('\n')
+    
+    # ANSI Colors
+    MAGENTA = '\033[95m'
+    GREEN = '\033[92m'
+    GREY = '\033[90m'
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+
+    for line in lines:
+        if not line: continue
+        try:
+            full_hash, short_hash, subject, author, relative_date = line.split('|', 4)
+            hash_int = int(full_hash, 16)
+            
+            if is_prime(hash_int):
+                prime_badge = f"{MAGENTA}{BOLD}[PRIME]{RESET}"
+                hash_display = f"{MAGENTA}{short_hash}{RESET}"
+            else:
+                prime_badge = "       "
+                hash_display = f"{GREY}{short_hash}{RESET}"
+
+            print(f"{prime_badge} {hash_display} - {subject} {GREY}({author}, {relative_date}){RESET}")
+        except ValueError:
+            # Fallback for weird formats
+            print(line)
+
+if __name__ == '__main__':
+    main()

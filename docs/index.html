@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             background: #FF10F0; /* FLUORO MAGENTA */
@@ -18,7 +17,6 @@
             line-height: 1.6;
             padding: 2rem;
         }
-
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -27,7 +25,6 @@
             border: 8px solid #000;
             box-shadow: 12px 12px 0 #000;
         }
-
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -35,7 +32,6 @@
             border-bottom: 4px solid #FF10F0;
             padding-bottom: 1rem;
         }
-
         h2 {
             font-size: 1.5rem;
             margin-top: 2rem;
@@ -45,13 +41,11 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .subtitle {
             font-size: 1.2rem;
             color: #666;
             margin-bottom: 2rem;
         }
-
         .install-box {
             background: #000;
             color: #0F0;
@@ -61,11 +55,9 @@
             font-family: 'Courier New', monospace;
             overflow-x: auto;
         }
-
         .install-box code {
             color: #0F0;
         }
-
         .copy-btn-inline {
             background: #FF10F0;
             color: #FFF;
@@ -79,26 +71,22 @@
             transition: all 0.2s;
             box-shadow: 3px 3px 0 #000;
         }
-
         .copy-btn-inline:hover {
             background: #FFF;
             color: #FF10F0;
             border-color: #FF10F0;
             box-shadow: 3px 3px 0 #FF10F0;
         }
-
         .copy-btn-inline:active {
             transform: scale(0.95);
             box-shadow: 2px 2px 0 #000;
         }
-
         .copy-btn-inline.copied {
             background: #0F0;
             color: #000;
             border-color: #000;
             box-shadow: 3px 3px 0 #000;
         }
-
         .example {
             background: #f5f5f5;
             padding: 1rem;
@@ -106,7 +94,6 @@
             border-left: 4px solid #FF10F0;
             font-size: 0.9rem;
         }
-
         .prime-badge {
             background: #FF10F0;
             color: #FFF;
@@ -117,27 +104,26 @@
             border: 3px solid #000;
             box-shadow: 4px 4px 0 #000;
         }
-
+        .flag {
+            color: #FF10F0;
+            font-weight: bold;
+        }
         ul {
             margin: 1rem 0 1rem 2rem;
         }
-
         li {
             margin: 0.5rem 0;
         }
-
         a {
             color: #FF10F0;
             text-decoration: none;
             font-weight: bold;
             border-bottom: 2px solid #FF10F0;
         }
-
         a:hover {
             background: #FF10F0;
             color: #FFF;
         }
-
         .footer {
             margin-top: 3rem;
             padding-top: 2rem;
@@ -145,61 +131,50 @@
             text-align: center;
             color: #666;
         }
-
         .commit-hash {
             font-family: 'Courier New', monospace;
             background: #FFE0FE;
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
         }
-
         @media (max-width: 768px) {
             body {
                 padding: 1.25rem;
             }
-
             .container {
                 padding: 2rem;
                 margin: 0.5rem;
                 border-width: 6px;
                 box-shadow: 8px 8px 0 #000;
             }
-
             h1 {
                 font-size: 2rem;
             }
-
             h2 {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.75rem;
             }
-
             .install-box {
                 font-size: 0.95rem;
             }
-
             .example {
                 font-size: 0.85rem;
             }
         }
-
         @media (max-width: 480px) {
             body {
                 padding: 1rem;
             }
-
             .container {
                 padding: 1.5rem;
                 margin: 0.25rem;
                 border-width: 5px;
                 box-shadow: 6px 6px 0 #000;
             }
-
             .install-box {
                 padding: 1rem;
             }
-
             .copy-btn-inline {
                 width: 100%;
                 text-align: center;
@@ -211,11 +186,8 @@
 <body>
     <div class="container">
         <h1>git-prime</h1>
-        <p class="subtitle">Ensure your 160-bit git commit hashes are Number Theoretic compliant</p>
-
-        <div class="prime-badge">
-            [PRIME CERTIFIED]
-        </div>
+        <p class="subtitle">Ensure your 160-bit git commit hashes are Number Theoretic compliant.</p>
+        <div class="prime-badge">[PRIME CERTIFIED]</div>
 
         <h2>What is this?</h2>
         <p>
@@ -237,18 +209,36 @@
         <h2>Usage</h2>
         <div class="example">
             <strong>$ git prime-commit "Fix critical bug"</strong><br><br>
+            <em>Finds any prime hash.</em><br><br>
             Searching for prime commit hash...<br>
             Base message: Fix critical bug<br>
             Attempt 10: d051b974ece9d844... not prime<br>
             Attempt 20: 954de912a9e5bbce... not prime<br>
             Attempt 30: ace4df509c5a9677... not prime<br>
             ...<br>
-            Attempt 168: cb80ebbd975f0028... not prime<br><br>
+            Attempt 160: cb80ebbd975f0028... not prime<br><br>
             <strong>[PRIME] Found after 168 attempts!</strong><br>
             &nbsp;&nbsp;Commit: <span class="commit-hash">cb80ebbd975f00288dca70d8fa735c688755f947</span><br>
-            &nbsp;&nbsp;Hash as int: 1161800157764419353674868058637793188631547345223<br>
+            &nbsp;&nbsp;Hash as decimal: 1161800157764419353674868058637793188631547345223<br>
             &nbsp;&nbsp;<a href="https://www.wolframalpha.com/input?i=1161800157764419353674868058637793188631547345223" target="_blank" style="color: #FF10F0; font-size: 0.9em;">→ Verify on WolframAlpha</a><br>
-            &nbsp;&nbsp;Message: "Fix critical bug" + git-prime Nonce: 167
+            &nbsp;&nbsp;Message: "Fix critical bug"<br>Git-Prime-Nonce: 167
+        </div>
+
+        <div class="example">
+            <strong>$ git prime-commit "Vanity Commit" <span class="flag">--hex-prefix dead</span></strong><br><br>
+            <em>Finds a prime hash starting with "dead..."</em>
+        </div>
+
+        <div class="example">
+            <strong>$ git prime-commit "Proof of Work" <span class="flag">--difficulty 4</span></strong><br><br>
+            <em>Finds a prime hash starting with "0000..." (proof-of-work style vanity)</em>
+        </div>
+
+        <div class="example">
+            <strong>$ git prime-log</strong><br><br>
+            <span style="color: #FF10F0; font-weight:bold;">[PRIME]</span> cb80ebbd - Fix critical bug<br>
+            <span style="color: #999;"> </span> a1b2c3d4 - Regular commit<br>
+            <span style="color: #FF10F0; font-weight:bold;">[PRIME]</span> 7e9f1a2b - Initial commit
         </div>
 
         <h2>How it works</h2>
@@ -256,7 +246,7 @@
             <li>SHA-1 hashes are 160 bits (40 hex characters)</li>
             <li>When interpreted as integers, they range from 0 to ~10<sup>48</sup></li>
             <li>Miller-Rabin primality test checks if the hash is prime</li>
-            <li>Appends nonces (git-prime Nonce: N) to your message until a prime hash is found</li>
+            <li>Appends nonces (Git-Prime-Nonce: N) to your message until a prime hash is found</li>
             <li>Average runtime: 30-120 seconds</li>
         </ul>
 
@@ -270,18 +260,19 @@
 
         <h2>Why?</h2>
         <p>
-            Because hunting for prime commit hashes is more fun than arguing about
-            commit message conventions.
+            <strong>Mathematical Rigor:</strong> SHA-1 hashes are 160-bit integers. The Prime Number Theorem dictates that primes are abundant (~1 in 111 hashes), yet standard git commits rely on randomness, ignoring the elegance of indivisibility.
         </p>
         <p style="margin-top: 1rem;">
-            But also: <strong>shouldn't the global distributed compute grid be used to
-            forward number theoretic random non-goals like primality?</strong>
+            <strong>Indivisibility:</strong> A composite number can be broken down. It is weak. A prime number stands alone. By forcing your commit hash to be prime, you are ensuring that your code changes correspond to an atomic, unbreakable coordinate in the number line.
         </p>
         <p style="margin-top: 1rem;">
-            Every developer running <code>git prime-commit</code> contributes cycles to
-            the noble pursuit of finding 160-bit primes hidden in SHA-1 space.
-            It's distributed computing for mathematically pointless but aesthetically
-            satisfying goals.
+            <strong>Because you can:</strong> The global distributed compute grid is mostly wasted on idle loops. <code>git-prime</code> reclaims those cycles to search for beautiful numbers.
+        </p>
+        <p style="margin-top: 1rem;">
+            But also: shouldn't the global distributed compute grid be used to forward number theoretic random non-goals like primality?
+        </p>
+        <p style="margin-top: 1rem;">
+            Every developer running <code>git prime-commit</code> contributes cycles to the noble pursuit of finding 160-bit primes hidden in SHA-1 space. It's distributed computing for mathematically pointless but aesthetically satisfying goals.
         </p>
 
         <div class="footer">
@@ -302,7 +293,6 @@
         function copyInstall() {
             const cmd = document.getElementById('install-cmd').textContent;
             const btn = event.target;
-
             // Try modern clipboard API first
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(cmd).then(() => {
@@ -314,7 +304,6 @@
                 fallbackCopy(cmd, btn);
             }
         }
-
         function fallbackCopy(text, btn) {
             // Fallback for older browsers and mobile
             const textarea = document.createElement('textarea');
@@ -324,7 +313,6 @@
             document.body.appendChild(textarea);
             textarea.select();
             textarea.setSelectionRange(0, 99999); // For mobile
-
             try {
                 document.execCommand('copy');
                 showCopied(btn);
@@ -332,10 +320,8 @@
                 btn.textContent = 'ERROR';
                 setTimeout(() => btn.textContent = 'COPY', 2000);
             }
-
             document.body.removeChild(textarea);
         }
-
         function showCopied(btn) {
             btn.textContent = 'COPIED!';
             btn.classList.add('copied');

@@ -1,9 +1,9 @@
-#!/usr/bin/env pwsh
-# Install git-prime-commit on Windows
+﻿#!/usr/bin/env pwsh
+# Install git-prime tools on Windows
 
 $ErrorActionPreference = 'Stop'
 
-Write-Host "Installing git-prime-commit..." -ForegroundColor Cyan
+Write-Host "Installing git-prime tools..." -ForegroundColor Cyan
 
 # Determine install location
 $InstallDir = "$env:LOCALAPPDATA\Programs\git-prime"
@@ -12,24 +12,35 @@ if (-not (Test-Path $InstallDir)) {
     New-Item -ItemType Directory -Path $InstallDir -Force | Out-Null
 }
 
-# Download the script
-$ScriptUrl = if ($env:GIT_PRIME_COMMIT_URL) { $env:GIT_PRIME_COMMIT_URL } else { "https://textonly.github.io/git-prime/git-prime-commit" }
-$DestPath = Join-Path $InstallDir "git-prime-commit"
+$BaseUrl = "https://textonly.github.io/git-prime"
+$Tools = @("git-prime-commit", "git-prime-log")
 
-Write-Host "Downloading from $ScriptUrl..." -ForegroundColor Gray
+foreach ($Tool in $Tools) {
+    $ScriptUrl = "$BaseUrl/$Tool"
+    $DestPath = Join-Path $InstallDir $Tool
+    $WrapperPath = Join-Path $InstallDir "$Tool.cmd"
 
-try {
-    Invoke-WebRequest -Uri $ScriptUrl -OutFile $DestPath -UseBasicParsing
-} catch {
-    Write-Error "Failed to download git-prime-commit: $_"
-    exit 1
+    Write-Host "Downloading $Tool..." -ForegroundColor Gray
+
+    try {
+        Invoke-WebRequest -Uri $ScriptUrl -OutFile $DestPath -UseBasicParsing
+    } catch {
+        Write-Error "Failed to download $Tool: $_"
+        continue
+    }
+
+    # Create a batch wrapper so it runs automatically as a git subcommand
+    # This removes the need for manual git aliases
+    $BatchContent = "@echo off`r`npython `"%~dp0\$Tool`" %*"
+    Set-Content -Path $WrapperPath -Value $BatchContent
 }
 
-Write-Host "Installed to $DestPath" -ForegroundColor Green
+Write-Host ""
+Write-Host "✓ Installed to $InstallDir" -ForegroundColor Green
 Write-Host ""
 Write-Host "Usage:" -ForegroundColor Yellow
-Write-Host "  python $DestPath `"Your commit message`""
-Write-Host "  python $DestPath -m `"Your commit message`""
+Write-Host "  git prime-commit `"message`""
+Write-Host "  git prime-log"
 Write-Host ""
 
 # Check if directory is in PATH
@@ -42,14 +53,8 @@ if ($CurrentPath -notlike "*$InstallDir*") {
 
     Write-Host "PATH updated! Restart your terminal for changes to take effect." -ForegroundColor Green
     Write-Host ""
-    Write-Host "Or run this in your current session:" -ForegroundColor Gray
+    Write-Host "Or run this in your current session to use immediately:" -ForegroundColor Gray
     Write-Host "  `$env:Path += `";$InstallDir`"" -ForegroundColor Gray
 } else {
-    Write-Host "$InstallDir is already in PATH" -ForegroundColor Green
+    Write-Host "PATH is already configured." -ForegroundColor Green
 }
-
-Write-Host ""
-Write-Host "Create a git alias for easier usage:" -ForegroundColor Yellow
-Write-Host "  git config --global alias.prime-commit '!python $DestPath'" -ForegroundColor Gray
-Write-Host ""
-Write-Host "Then use: git prime-commit `"message`"" -ForegroundColor Cyan

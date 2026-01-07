@@ -1,9 +1,9 @@
 #!/bin/bash
-# Install git-prime-commit globally
+# Install git-prime tools globally
 
 set -e
 
-echo "Installing git-prime-commit..."
+echo "Installing git-prime tools..."
 
 # Determine install location
 if [ -w "/usr/local/bin" ]; then
@@ -16,28 +16,38 @@ else
     mkdir -p "$INSTALL_DIR"
 fi
 
-# Download or copy the script
-SCRIPT_URL="${GIT_PRIME_COMMIT_URL:-https://textonly.github.io/git-prime/git-prime-commit}"
+BASE_URL="https://textonly.github.io/git-prime"
+TOOLS=("git-prime-commit" "git-prime-log")
 
-if command -v curl &> /dev/null; then
-    curl -fsSL "$SCRIPT_URL" -o "$INSTALL_DIR/git-prime-commit"
-elif command -v wget &> /dev/null; then
-    wget -q "$SCRIPT_URL" -O "$INSTALL_DIR/git-prime-commit"
-else
-    echo "Error: Neither curl nor wget found. Please install one of them." >&2
-    exit 1
-fi
+for tool in "${TOOLS[@]}"; do
+    TARGET="$INSTALL_DIR/$tool"
+    URL="${BASE_URL}/${tool}"
+    
+    echo "Downloading $tool..."
+    
+    if command -v curl &> /dev/null; then
+        curl -fsSL "$URL" -o "$TARGET"
+    elif command -v wget &> /dev/null; then
+        wget -q "$URL" -O "$TARGET"
+    else
+        echo "Error: Neither curl nor wget found. Please install one of them." >&2
+        exit 1
+    fi
+    
+    chmod +x "$TARGET"
+done
 
-chmod +x "$INSTALL_DIR/git-prime-commit"
-
-echo "✓ Installed to $INSTALL_DIR/git-prime-commit"
 echo ""
-echo "Usage: git prime-commit <message>"
-echo "   or: git prime-commit -m <message>"
+echo "✓ Successfully installed to $INSTALL_DIR"
+echo ""
+echo "Usage:"
+echo "  git prime-commit \"message\"   # Create a prime commit"
+echo "  git prime-log                # View log with prime highlights"
 echo ""
 
 # Check if install dir is in PATH
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
-    echo "Note: Add $INSTALL_DIR to your PATH:"
+    echo "Note: Add $INSTALL_DIR to your PATH to use git subcommands:"
     echo "  echo 'export PATH=\"\$PATH:$INSTALL_DIR\"' >> ~/.bashrc"
+    echo "  source ~/.bashrc"
 fi
