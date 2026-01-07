@@ -11,7 +11,7 @@ Why? Because you can. And because prime commit hashes are cool.
 ## Installation
 
 ```bash
-curl -fsSL https://textonly.github.io/git-prime/install-prime-commit.sh | bash
+curl -fsSL https://textonly.github.io/git-prime/install.sh | bash
 ```
 
 Or manually:
