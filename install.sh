@@ -1,6 +1,5 @@
 #!/bin/bash
 # Install git-prime tools globally
-
 set -e
 
 echo "Installing git-prime tools..."

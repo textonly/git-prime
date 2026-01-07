@@ -10,6 +10,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
             background: #FF10F0; /* FLUORO MAGENTA */
@@ -17,6 +18,7 @@
             line-height: 1.6;
             padding: 2rem;
         }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
@@ -25,6 +27,7 @@
             border: 8px solid #000;
             box-shadow: 12px 12px 0 #000;
         }
+
         h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -32,6 +35,7 @@
             border-bottom: 4px solid #FF10F0;
             padding-bottom: 1rem;
         }
+
         h2 {
             font-size: 1.5rem;
             margin-top: 2rem;
@@ -41,11 +45,13 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .subtitle {
             font-size: 1.2rem;
             color: #666;
             margin-bottom: 2rem;
         }
+
         .install-box {
             background: #000;
             color: #0F0;
@@ -55,9 +61,11 @@
             font-family: 'Courier New', monospace;
             overflow-x: auto;
         }
+
         .install-box code {
             color: #0F0;
         }
+
         .copy-btn-inline {
             background: #FF10F0;
             color: #FFF;
@@ -71,22 +79,26 @@
             transition: all 0.2s;
             box-shadow: 3px 3px 0 #000;
         }
+
         .copy-btn-inline:hover {
             background: #FFF;
             color: #FF10F0;
             border-color: #FF10F0;
             box-shadow: 3px 3px 0 #FF10F0;
         }
+
         .copy-btn-inline:active {
             transform: scale(0.95);
             box-shadow: 2px 2px 0 #000;
         }
+
         .copy-btn-inline.copied {
             background: #0F0;
             color: #000;
             border-color: #000;
             box-shadow: 3px 3px 0 #000;
         }
+
         .example {
             background: #f5f5f5;
             padding: 1rem;
@@ -94,6 +106,7 @@
             border-left: 4px solid #FF10F0;
             font-size: 0.9rem;
         }
+
         .prime-badge {
             background: #FF10F0;
             color: #FFF;
@@ -104,26 +117,32 @@
             border: 3px solid #000;
             box-shadow: 4px 4px 0 #000;
         }
+
         .flag {
             color: #FF10F0;
             font-weight: bold;
         }
+
         ul {
             margin: 1rem 0 1rem 2rem;
         }
+
         li {
             margin: 0.5rem 0;
         }
+
         a {
             color: #FF10F0;
             text-decoration: none;
             font-weight: bold;
             border-bottom: 2px solid #FF10F0;
         }
+
         a:hover {
             background: #FF10F0;
             color: #FFF;
         }
+
         .footer {
             margin-top: 3rem;
             padding-top: 2rem;
@@ -131,50 +150,61 @@
             text-align: center;
             color: #666;
         }
+
         .commit-hash {
             font-family: 'Courier New', monospace;
             background: #FFE0FE;
             padding: 0.2rem 0.4rem;
             border-radius: 3px;
         }
+
         @media (max-width: 768px) {
             body {
                 padding: 1.25rem;
             }
+
             .container {
                 padding: 2rem;
                 margin: 0.5rem;
                 border-width: 6px;
                 box-shadow: 8px 8px 0 #000;
             }
+
             h1 {
                 font-size: 2rem;
             }
+
             h2 {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.75rem;
             }
+
             .install-box {
                 font-size: 0.95rem;
             }
+
             .example {
                 font-size: 0.85rem;
             }
         }
+
         @media (max-width: 480px) {
             body {
                 padding: 1rem;
             }
+
             .container {
                 padding: 1.5rem;
                 margin: 0.25rem;
                 border-width: 5px;
                 box-shadow: 6px 6px 0 #000;
             }
+
             .install-box {
                 padding: 1rem;
             }
+
             .copy-btn-inline {
                 width: 100%;
                 text-align: center;
@@ -187,7 +217,10 @@
     <div class="container">
         <h1>git-prime</h1>
         <p class="subtitle">Ensure your 160-bit git commit hashes are Number Theoretic compliant.</p>
-        <div class="prime-badge">[PRIME CERTIFIED]</div>
+
+        <div class="prime-badge">
+            [PRIME CERTIFIED]
+        </div>
 
         <h2>What is this?</h2>
         <p>
@@ -237,7 +270,7 @@
         <div class="example">
             <strong>$ git prime-log</strong><br><br>
             <span style="color: #FF10F0; font-weight:bold;">[PRIME]</span> cb80ebbd - Fix critical bug<br>
-            <span style="color: #999;"> </span> a1b2c3d4 - Regular commit<br>
+            <span style="color: #999;">       </span> a1b2c3d4 - Regular commit<br>
             <span style="color: #FF10F0; font-weight:bold;">[PRIME]</span> 7e9f1a2b - Initial commit
         </div>
 
@@ -268,6 +301,15 @@
         <p style="margin-top: 1rem;">
             <strong>Because you can:</strong> The global distributed compute grid is mostly wasted on idle loops. <code>git-prime</code> reclaims those cycles to search for beautiful numbers.
         </p>
+
+        <p style="margin-top: 1rem;">
+            <strong>Security Note: Does this increase collision risk?</strong><br>
+            Technically, yes. Practically, no.
+        </p>
+        <p style="margin-top: 0.5rem; color: #555; font-size: 0.95em;">
+            Restricting hashes to prime numbers reduces the search space by a factor of ~111. In information theoretic terms, this reduces the entropy by approximately <strong>7 bits</strong> (from 160 to ~153). While we don't recommend this for securing nuclear launch codes (mostly because it uses SHA-1), the probability of an accidental collision remains statistically zero.
+        </p>
+
         <p style="margin-top: 1rem;">
             But also: shouldn't the global distributed compute grid be used to forward number theoretic random non-goals like primality?
         </p>
@@ -293,6 +335,7 @@
         function copyInstall() {
             const cmd = document.getElementById('install-cmd').textContent;
             const btn = event.target;
+
             // Try modern clipboard API first
             if (navigator.clipboard && navigator.clipboard.writeText) {
                 navigator.clipboard.writeText(cmd).then(() => {
@@ -304,6 +347,7 @@
                 fallbackCopy(cmd, btn);
             }
         }
+
         function fallbackCopy(text, btn) {
             // Fallback for older browsers and mobile
             const textarea = document.createElement('textarea');
@@ -313,6 +357,7 @@
             document.body.appendChild(textarea);
             textarea.select();
             textarea.setSelectionRange(0, 99999); // For mobile
+
             try {
                 document.execCommand('copy');
                 showCopied(btn);
@@ -320,8 +365,10 @@
                 btn.textContent = 'ERROR';
                 setTimeout(() => btn.textContent = 'COPY', 2000);
             }
+
             document.body.removeChild(textarea);
         }
+
         function showCopied(btn) {
             btn.textContent = 'COPIED!';
             btn.classList.add('copied');

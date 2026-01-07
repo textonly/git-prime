@@ -5,42 +5,36 @@ git-prime-commit: Create git commits with prime SHA-1 hashes
 import subprocess
 import sys
 import os
+import time
+import argparse
+import random
 
 def is_prime_miller_rabin(n, k=40):
-    """Miller-Rabin primality test - probabilistic but very reliable"""
-    if n < 2:
-        return False
-    if n == 2 or n == 3:
-        return True
-    if n % 2 == 0:
-        return False
+    """Miller-Rabin primality test."""
+    if n < 2: return False
+    if n == 2 or n == 3: return True
+    if n % 2 == 0: return False
 
-    # Write n-1 as 2^r * d
     r, d = 0, n - 1
     while d % 2 == 0:
         r += 1
         d //= 2
 
-    # Witness loop
-    import random
     for _ in range(k):
         a = random.randrange(2, n - 1)
         x = pow(a, d, n)
-
         if x == 1 or x == n - 1:
             continue
-
         for _ in range(r - 1):
             x = pow(x, 2, n)
             if x == n - 1:
                 break
         else:
             return False
-
     return True
 
 def get_commit_hash(message, author=None, date=None):
-    """Create a commit and return its hash as an integer"""
+    """Create a commit and return its hash as integer and hex string."""
     env = os.environ.copy()
     if author:
         env['GIT_AUTHOR_NAME'] = author[0]
@@ -51,76 +45,111 @@ def get_commit_hash(message, author=None, date=None):
         env['GIT_AUTHOR_DATE'] = date
         env['GIT_COMMITTER_DATE'] = date
 
-    # Commit with the message
     result = subprocess.run(
         ['git', 'commit', '--allow-empty', '-m', message],
-        capture_output=True,
-        text=True,
-        env=env
+        capture_output=True, text=True, env=env
     )
 
     if result.returncode != 0:
-        print(f"Error creating commit: {result.stderr}", file=sys.stderr)
-        return None
+        # If the index is locked or empty (and --allow-empty fails), handle gracefully
+        print(f"Git error: {result.stderr.strip()}", file=sys.stderr)
+        return None, None
 
-    # Get the hash
     result = subprocess.run(
         ['git', 'rev-parse', 'HEAD'],
-        capture_output=True,
-        text=True
+        capture_output=True, text=True
     )
-
+    
     commit_hash = result.stdout.strip()
     return int(commit_hash, 16), commit_hash
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: git prime-commit <message>", file=sys.stderr)
-        print("   or: git prime-commit -m <message>", file=sys.stderr)
+    parser = argparse.ArgumentParser(description="Create git commits with prime SHA-1 hashes.")
+    parser.add_argument('message', nargs='*', help="Commit message")
+    parser.add_argument('-m', dest='message_flag', help="Commit message (alternate)")
+    parser.add_argument('--difficulty', type=int, default=0, help="Number of leading zeros required (Proof of Work)")
+    parser.add_argument('--hex-prefix', type=str, help="Required hex prefix (e.g., 'dead')")
+    parser.add_argument('--prefix', type=str, help="Required decimal prefix")
+    parser.add_argument('--timeout', type=int, default=0, help="Max seconds to search (0 = forever)")
+    
+    args = parser.parse_args()
+
+    # Handle message parsing
+    base_message = ""
+    if args.message_flag:
+        base_message = args.message_flag
+    elif args.message:
+        base_message = ' '.join(args.message)
+    else:
+        print("Error: Message required.", file=sys.stderr)
         sys.exit(1)
 
-    # Parse message
-    if sys.argv[1] == '-m':
-        if len(sys.argv) < 3:
-            print("Error: -m requires a message", file=sys.stderr)
+    # Validate Hex Prefix
+    if args.hex_prefix:
+        import re
+        if not re.match(r'^[0-9a-fA-F]+$', args.hex_prefix):
+            print("Error: --hex-prefix must be valid hex.", file=sys.stderr)
             sys.exit(1)
-        base_message = sys.argv[2]
-    else:
-        base_message = ' '.join(sys.argv[1:])
+        args.hex_prefix = args.hex_prefix.lower()
 
     print(f"Searching for prime commit hash...")
-    print(f"Base message: {base_message}")
+    print(f"Message: {base_message}")
+    if args.difficulty: print(f"Difficulty: {args.difficulty} leading zeros")
+    if args.hex_prefix: print(f"Hex Prefix: {args.hex_prefix}")
+    if args.prefix:     print(f"Dec Prefix: {args.prefix}")
 
+    start_time = time.time()
     attempt = 0
+    
     while True:
-        # Fuzz the message with a nonce
+        # Check timeout
+        if args.timeout > 0 and (time.time() - start_time) > args.timeout:
+            subprocess.run(['git', 'reset', '--soft', 'HEAD~1'], capture_output=True)
+            print(f"\n[FAILED] Timed out after {args.timeout} seconds.")
+            sys.exit(1)
+
+        # 1. Fuzz Message
+        # Using a proper Git Trailer format (Blank line + Key: Value)
         if attempt == 0:
             message = base_message
         else:
-            message = f"{base_message}\n\ngit-prime Nonce: {attempt}"
+            message = f"{base_message}\n\nPrime-Nonce: {attempt}"
 
+        # 2. Commit
         hash_int, hash_hex = get_commit_hash(message)
         if hash_int is None:
             sys.exit(1)
 
         attempt += 1
-
         if attempt % 10 == 0:
-            print(f"Attempt {attempt}: {hash_hex[:16]}... ", end='', flush=True)
+            elapsed = int(time.time() - start_time)
+            print(f"\rAttempt {attempt} ({elapsed}s): {hash_hex[:12]}... ", end='', flush=True)
 
+        # 3. FAST CHECKS (Strings)
+        # Check difficulty (leading zeros)
+        if args.difficulty and not hash_hex.startswith('0' * args.difficulty):
+            subprocess.run(['git', 'reset', '--soft', 'HEAD~1'], capture_output=True)
+            continue
+
+        # Check Hex Prefix
+        if args.hex_prefix and not hash_hex.startswith(args.hex_prefix):
+            subprocess.run(['git', 'reset', '--soft', 'HEAD~1'], capture_output=True)
+            continue
+
+        # Check Decimal Prefix (slower than hex, faster than prime)
+        if args.prefix and not str(hash_int).startswith(args.prefix):
+            subprocess.run(['git', 'reset', '--soft', 'HEAD~1'], capture_output=True)
+            continue
+
+        # 4. SLOW CHECK (Primality)
         if is_prime_miller_rabin(hash_int):
             print(f"\n[PRIME] Found after {attempt} attempts!")
             print(f"  Commit: {hash_hex}")
-            print(f"  Hash as int: {hash_int}")
-            print(f"  Message nonce: {attempt - 1 if attempt > 1 else 'none'}")
+            print(f"  Hash as decimal: {hash_int}")
+            print(f"  Nonce: {attempt - 1 if attempt > 1 else 'none'}")
             break
         else:
-            # Undo the commit and try again
-            subprocess.run(['git', 'reset', '--soft', 'HEAD~1'],
-                         capture_output=True)
-
-            if attempt % 10 == 0:
-                print("not prime")
+            subprocess.run(['git', 'reset', '--soft', 'HEAD~1'], capture_output=True)
 
 if __name__ == '__main__':
     main()
