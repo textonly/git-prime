@@ -57,10 +57,46 @@
             border-radius: 4px;
             font-family: 'Courier New', monospace;
             overflow-x: auto;
+            position: relative;
         }
 
         .install-box code {
             color: #0F0;
+            display: block;
+            padding-right: 100px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #FF10F0;
+            color: #FFF;
+            border: 2px solid #FFF;
+            padding: 0.5rem 1rem;
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: #FFF;
+            color: #FF10F0;
+            border-color: #FF10F0;
+        }
+
+        .copy-btn:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: #0F0;
+            color: #000;
+            border-color: #0F0;
         }
 
         .example {
@@ -138,7 +174,8 @@
 
         <h2>Installation</h2>
         <div class="install-box">
-            <code>curl -fsSL https://raw.githubusercontent.com/textonly/git-prime/main/install-prime-commit.sh | bash</code>
+            <code id="install-cmd">curl -fsSL https://raw.githubusercontent.com/textonly/git-prime/main/install-prime-commit.sh | bash</code>
+            <button class="copy-btn" onclick="copyInstall()">COPY</button>
         </div>
 
         <h2>Usage</h2>
@@ -200,5 +237,53 @@
             </p>
         </div>
     </div>
+
+    <script>
+        function copyInstall() {
+            const cmd = document.getElementById('install-cmd').textContent;
+            const btn = event.target;
+
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(cmd).then(() => {
+                    showCopied(btn);
+                }).catch(() => {
+                    fallbackCopy(cmd, btn);
+                });
+            } else {
+                fallbackCopy(cmd, btn);
+            }
+        }
+
+        function fallbackCopy(text, btn) {
+            // Fallback for older browsers and mobile
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // For mobile
+
+            try {
+                document.execCommand('copy');
+                showCopied(btn);
+            } catch (err) {
+                btn.textContent = 'ERROR';
+                setTimeout(() => btn.textContent = 'COPY', 2000);
+            }
+
+            document.body.removeChild(textarea);
+        }
+
+        function showCopied(btn) {
+            btn.textContent = 'COPIED!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = 'COPY';
+                btn.classList.remove('copied');
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
